@@ -43,7 +43,7 @@
 
 ### Step 4: Update
 
-1. Whenever you want to update the code
+1. Whenever you want to update the code repeat
     ```
-    gcloud app update
+    gcloud app deploy
     ```
