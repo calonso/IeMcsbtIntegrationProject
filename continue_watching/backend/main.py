@@ -1,9 +1,17 @@
 from flask import Flask, jsonify
 import requests
 from flask_cors import CORS
+from models import db, WatchedEpisode
 
 app = Flask(__name__)
 CORS(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
 def homepage():
@@ -32,6 +40,31 @@ def continue_watching():
 
     return jsonify(diff)
 
+from models import WatchedEpisode
+
+def get_or_create_watched_episode(user_id, episode_id):
+    # Try to find an existing record
+    watched_episode = WatchedEpisode.query.filter_by(user_id=user_id, episode_id=episode_id).first()
+    
+    # If it doesn't exist, create a new one
+    if not watched_episode:
+        watched_episode = WatchedEpisode(user_id=user_id, episode_id=episode_id, progress=0)
+        db.session.add(watched_episode)
+        db.session.commit()
+    
+    return watched_episode
+
+
+@app.route('/continue-watching/update-progress/<user_id>/<episode_id>/<progress>')
+def update_progress(user_id, episode_id, progress):
+    # Get or create the watched episode record
+    watched_episode = get_or_create_watched_episode(user_id, episode_id)
+    
+    # Update the progress
+    watched_episode.progress = progress
+    db.session.commit()
+
+    return jsonify(watched_episode.dict())
 
 def watch_again():
     return {
