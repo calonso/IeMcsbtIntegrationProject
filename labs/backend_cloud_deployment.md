@@ -10,7 +10,8 @@
 
 ### Step 1: Prepare for Deployment
 
-1. Ensure the Google Cloud SDK is installed and initialized: 
+1. Ensure the Google Cloud SDK is installed in a different directory than your Flask application.
+1. Ensure the Google Cloud SDK is initialized: 
     ```
     gcloud init
     ```
@@ -24,6 +25,8 @@
     1. Assign `Billing Account for Education` billing account.
 
 ### Step 2: Deploy to Google App Engine
+1. Navigate to your project's directory
+1. Make sure your Flask python application is named `main.py`
 1. Create a file named `app.yaml` with the following contents
     ```
     runtime: python39
