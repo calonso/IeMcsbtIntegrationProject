@@ -69,5 +69,5 @@ The -m flag enables parallel uploads for faster transfer, and -r is for recursiv
 
 ### Step 8: Update the contents
 
-1. If you need to upload a new version, first delete all the contents in the bucket, then repeat this process.
+1. If you need to upload a new version, first delete all the contents in the bucket (`gsutil -m rm "gs://YOUR_UNIQUE_BUCKET_NAME/**"`), then repeat this process.
 1. Make sure you clear your browser's cache before reloading.
