@@ -54,6 +54,7 @@ Example:
     1. This compiles the current version of your app into static files (index.html, CSS and JS) in the `build` directory.
 
 Example:
+
 ![Screenshot of the build process](img/front_build.png)
 
 
@@ -70,6 +71,7 @@ Example:
     ```
 
 Example:
+
 ![Screenshot of the file upload](img/front_upload.png)
 
 
@@ -79,6 +81,7 @@ Example:
     1. Replace YOUR_UNIQUE_BUCKET_NAME with the name of your bucket.
 
 Example:
+
 ![Screenshot of the deployed frontend](img/front_apponline.png)
 
 
@@ -87,6 +90,7 @@ Example:
 1. Navigate to cloud.google.com, type 'Cloud Storage' in the search bar and find your newly created bucket. See the assets inside.
 
 Example:
+
 ![Screenshot of the Cloud Console](img/front_webconsole.png)
 
 
@@ -101,4 +105,5 @@ Example:
 1. Make sure you clear your browser's cache before reloading.
 
 Example:
+
 ![Screenshot of the bucket cleanup](img/front_bucketclear.png)
