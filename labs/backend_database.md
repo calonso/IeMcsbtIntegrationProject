@@ -1,13 +1,5 @@
 # Add a storage layer to our app
 
-### Pre requisites: 
-* Have an autonomous free database in your Oracle Cloud. This is a lab already covered in databases class.
-* oracledb requirement
-* Create Autonomous database with mTLS disabled
-* Whitelist your IP Address
-* pip install oracledb
-https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/connecting-python-tls.html#GUID-64FC3F00-42EF-45FC-9306-DD0A61186B09
-
 ## Steps:
 
 ### Step 1: Create an autonomous database with mTLS disabled
@@ -98,3 +90,12 @@ def update_progress(user_id, episode_id, progress):
 1. Click Add my IP address again
 ![Screenshot of the modification](img/oracle_network.png)
 ![Screenshot of the modification](img/oracle_modify_ip.png)
+
+### Step 6: Enable connection from Google App Engine
+TODO
+
+### Resources
+* https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/connecting-python-tls.html#GUID-64FC3F00-42EF-45FC-9306-DD0A61186B09
+* https://python-oracledb.readthedocs.io/en/latest/user_guide/installation.html
+* https://python-oracledb.readthedocs.io/en/latest/user_guide/sql_execution.html#
+* https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/access-control-rules-autonomous.html#GUID-ECEC7F73-CB71-4121-8D16-6C4746A9EECF
