@@ -9,9 +9,9 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Identity, 
 from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import relationship, backref, sessionmaker, declarative_base
 
-un = '<Username>'
-pw = '<password>'
-dsn = '<dsn, copied from oracle cloud>'
+un = 'ADMIN'
+pw = 'Capstone2024'
+dsn = '(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1521)(host=adb.eu-madrid-1.oraclecloud.com))(connect_data=(service_name=g73db8b01b7e944_capstonedb2_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))'
 
 """
 # Standalone connection

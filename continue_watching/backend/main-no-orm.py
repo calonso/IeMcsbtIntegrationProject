@@ -59,8 +59,8 @@ def get_or_create_watched_episode(user_id, episode_id, connection):
     if not watched_episode:
         insert_query = text(
             """
-            INSERT INTO watched_episode(id, user_id, episode_id, progress)
-            VALUES (watched_episode_id_seq.NEXTVAL, :user_id, :episode_id, 0)
+            INSERT INTO watched_episode(user_id, episode_id, progress)
+            VALUES (:user_id, :episode_id, 0)
             """
         )
         connection.execute(insert_query, { "user_id": user_id, "episode_id":episode_id })

@@ -52,7 +52,7 @@ def continue_watching():
     else:
         print(f"Failed to get data: {response.status_code}")
 
-    return jsonify(diff)l
+    return jsonify(diff)
 
 def get_or_create_watched_episode(user_id, episode_id):
     # Try to find an existing record
@@ -61,8 +61,6 @@ def get_or_create_watched_episode(user_id, episode_id):
     # If it doesn't exist, create a new one
     if not watched_episode:
         watched_episode = WatchedEpisode(user_id=user_id, episode_id=episode_id, progress=0)
-        db.session.add(watched_episode)
-        db.session.commit()
     
     return watched_episode
 
@@ -74,6 +72,7 @@ def update_progress(user_id, episode_id, progress):
     
     # Update the progress
     watched_episode.progress = progress
+    db.session.add(watched_episode)
     db.session.commit()
 
     return jsonify(watched_episode.dict())
