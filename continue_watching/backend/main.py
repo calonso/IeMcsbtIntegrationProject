@@ -2,12 +2,26 @@ from flask import Flask, jsonify
 import requests
 from flask_cors import CORS
 from models import db, WatchedEpisode
+from sqlalchemy.pool import NullPool
+import oracledb
 
 app = Flask(__name__)
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+un = '<Username>'
+pw = '<password>'
+dsn = '<dsn, copied from oracle cloud>'
+
+pool = oracledb.create_pool(user=un, password=pw,
+                            dsn=dsn)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle+oracledb://'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'creator': pool.acquire,
+    'poolclass': NullPool
+}
+app.config['SQLALCHEMY_ECHO'] = True
 db.init_app(app)
 
 with app.app_context():
