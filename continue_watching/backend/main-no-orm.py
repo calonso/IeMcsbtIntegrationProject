@@ -4,6 +4,7 @@ from flask_cors import CORS
 from models import db, WatchedEpisode
 from sqlalchemy.pool import NullPool
 import oracledb
+from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
 CORS(app)
@@ -15,17 +16,7 @@ dsn = '<dsn, copied from oracle cloud>'
 pool = oracledb.create_pool(user=un, password=pw,
                             dsn=dsn)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle+oracledb://'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    'creator': pool.acquire,
-    'poolclass': NullPool
-}
-app.config['SQLALCHEMY_ECHO'] = True
-db.init_app(app)
-
-with app.app_context():
-    db.create_all()
+engine = create_engine("oracle+oracledb://", creator=pool.acquire, poolclass=NullPool, future=True, echo=True)
 
 @app.route('/')
 def homepage():
@@ -52,31 +43,49 @@ def continue_watching():
     else:
         print(f"Failed to get data: {response.status_code}")
 
-    return jsonify(diff)l
+    return jsonify(diff)
 
-def get_or_create_watched_episode(user_id, episode_id):
+def get_or_create_watched_episode(user_id, episode_id, connection):
     # Try to find an existing record
-    watched_episode = WatchedEpisode.query.filter_by(user_id=user_id, episode_id=episode_id).first()
+    select_query = text(
+        """
+        SELECT * FROM watched_episode WHERE user_id=:user_id AND episode_id=:episode_id
+        """
+    )
+    
+    watched_episode = connection.execute(select_query, {"user_id": user_id, "episode_id": episode_id}).mappings().fetchone()
     
     # If it doesn't exist, create a new one
     if not watched_episode:
-        watched_episode = WatchedEpisode(user_id=user_id, episode_id=episode_id, progress=0)
-        db.session.add(watched_episode)
-        db.session.commit()
-    
+        insert_query = text(
+            """
+            INSERT INTO watched_episode(id, user_id, episode_id, progress)
+            VALUES (watched_episode_id_seq.NEXTVAL, :user_id, :episode_id, 0)
+            """
+        )
+        connection.execute(insert_query, { "user_id": user_id, "episode_id":episode_id })
+
+        watched_episode = connection.execute(select_query, { "user_id": user_id, "episode_id": episode_id }).mappings().fetchone()
+
     return watched_episode
 
 
 @app.route('/continue-watching/update-progress/<user_id>/<episode_id>/<progress>')
 def update_progress(user_id, episode_id, progress):
-    # Get or create the watched episode record
-    watched_episode = get_or_create_watched_episode(user_id, episode_id)
-    
-    # Update the progress
-    watched_episode.progress = progress
-    db.session.commit()
+    with engine.connect() as connection:
+        # Get or create the watched episode record
+        watched_episode = get_or_create_watched_episode(user_id, episode_id, connection)
+        
+        # Update the progress
+        update_query = text(
+            """
+            UPDATE watched_episode SET progress=:progress WHERE id=:id
+            """
+        )
+        connection.execute(update_query, { "progress": progress, "id": watched_episode["id"] })
+        connection.commit()
 
-    return jsonify(watched_episode.dict())
+    return jsonify(dict(watched_episode))
 
 def watch_again():
     return {

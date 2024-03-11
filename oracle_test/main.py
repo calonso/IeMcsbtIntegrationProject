@@ -9,10 +9,9 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Identity, 
 from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import relationship, backref, sessionmaker, declarative_base
 
-un = '<username>'
+un = '<Username>'
 pw = '<password>'
-hostname, service_name = ["<hostname from connection string>", "<service_name from connection string>"]
-port = 1521
+dsn = '<dsn, copied from oracle cloud>'
 
 """
 # Standalone connection
