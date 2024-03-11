@@ -8,7 +8,7 @@
   1. Unmark 'Require mutual TLS'
   1. Click 'Add my IP Address'
 ![Screenshot of the creation](img/oracle_create_tls_db.png)
-1. Copy your database's connection string from 'Database connection' menu
+1. Copy your **high** database's connection string from 'Database connection' menu
 ![img](img/dsn.png)
 
 ### Step 2: Configure your backend to connect to your newly created database
